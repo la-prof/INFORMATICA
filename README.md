@@ -18,15 +18,6 @@ Ogni modulo comprende un notebook Jupyter con teoria ed esercizi guidati, e una 
 I notebook possono essere eseguiti direttamente nel browser tramite **Google Colab**, senza installare nulla.  
 Aprire il file `.ipynb` dalla cartella della lezione e cliccare il badge *Open in Colab*.
 
-In alternativa, per chi lavora in locale:
-
-```bash
-git clone https://github.com/TUO-USERNAME/informatica-lsa.git
-cd informatica-lsa
-pip install jupyter numpy matplotlib
-jupyter notebook
-```
-
 ---
 
 ## Strumenti
