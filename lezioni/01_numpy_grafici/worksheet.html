@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab – NumPy e Grafici di Funzioni</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&family=Spectral:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blu: #1a2e4a;
+    --azzurro: #2e7dc9;
+    --verde: #1f8a5e;
+    --arancio: #e07b2a;
+    --grigio: #f4f5f7;
+    --bordo: #d0d7e3;
+    --testo: #1a2030;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Spectral', Georgia, serif;
+    background: #eef1f5;
+    color: var(--testo);
+    padding: 30px 20px;
+  }
+
+  .pagina {
+    max-width: 740px;
+    margin: 0 auto;
+    background: white;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.12);
+    border-top: 6px solid var(--azzurro);
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--blu);
+    color: white;
+    padding: 22px 32px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 20px;
+  }
+  .header-left h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #a8c8f0;
+    margin-bottom: 4px;
+  }
+  .header-left h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    line-height: 1.1;
+  }
+  .header-right {
+    text-align: right;
+    font-size: 12px;
+    color: #8aaec8;
+    font-family: 'Barlow Condensed', sans-serif;
+    line-height: 1.8;
+    letter-spacing: 0.5px;
+  }
+
+  .corpo { padding: 28px 32px 32px; }
+
+  /* OBIETTIVI */
+  .obiettivi {
+    background: var(--grigio);
+    border-left: 4px solid var(--azzurro);
+    padding: 14px 18px;
+    margin-bottom: 24px;
+    border-radius: 0 4px 4px 0;
+  }
+  .obiettivi h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--azzurro);
+    margin-bottom: 8px;
+  }
+  .obiettivi ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+  }
+  .obiettivi ul li {
+    font-size: 13px;
+    color: #3a4a60;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+  }
+  .obiettivi ul li::before { content: "◆ "; color: var(--azzurro); font-size: 9px; vertical-align: middle; }
+
+  /* FASI */
+  .fase {
+    margin-bottom: 22px;
+    border: 1.5px solid var(--bordo);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .fase-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 11px 18px;
+    color: white;
+  }
+  .fase-1 .fase-header { background: var(--azzurro); }
+  .fase-2 .fase-header { background: var(--verde); }
+  .fase-3 .fase-header { background: var(--arancio); }
+
+  .fase-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    opacity: 0.5;
+    line-height: 1;
+  }
+  .fase-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    flex: 1;
+  }
+  .fase-tempo {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 11px;
+    background: rgba(255,255,255,0.2);
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+
+  .fase-body { padding: 16px 18px; }
+
+  .istruzione {
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 10px;
+    color: #2a3545;
+  }
+
+  /* CODE BLOCK */
+  .codice {
+    background: #1a2030;
+    color: #c8d8f0;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 12.5px;
+    padding: 14px 18px;
+    border-radius: 6px;
+    margin: 12px 0;
+    line-height: 1.8;
+    position: relative;
+  }
+  .codice .kw { color: #82aaff; }
+  .codice .fn { color: #89ddff; }
+  .codice .st { color: #c3e88d; }
+  .codice .nm { color: #f78c6c; }
+  .codice .cm { color: #546e7a; font-style: italic; }
+  .codice-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #546e7a;
+    margin-bottom: 6px;
+  }
+
+  /* DOMANDE */
+  .domanda {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 11px;
+    align-items: flex-start;
+  }
+  .domanda-n {
+    background: var(--verde);
+    color: white;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .domanda-2 .domanda-n { background: var(--arancio); }
+  .domanda p { font-size: 13.5px; line-height: 1.6; color: #2a3545; }
+  .hint {
+    display: inline-block;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 11px;
+    background: #f0f4ff;
+    color: var(--azzurro);
+    border: 1px solid #b8ccea;
+    padding: 1px 7px;
+    border-radius: 4px;
+    margin-left: 4px;
+  }
+
+  /* SFIDA */
+  .sfida-box {
+    background: #fff8f0;
+    border: 1.5px dashed var(--arancio);
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-top: 8px;
+  }
+  .sfida-box p { font-size: 13.5px; line-height: 1.65; color: #2a3545; }
+  .sfida-box em { color: var(--arancio); font-style: normal; font-weight: 600; }
+
+  /* CONSEGNA FINALE */
+  .consegna {
+    background: #f0f7ff;
+    border: 2px solid var(--azzurro);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin: 6px 0 22px;
+  }
+  .consegna h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--azzurro);
+    margin-bottom: 10px;
+  }
+  .consegna p { font-size: 14px; line-height: 1.7; color: #1a2e4a; }
+  .consegna .requisiti {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 20px;
+  }
+  .consegna .requisiti li {
+    font-size: 13px;
+    color: #3a4a60;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    list-style: none;
+  }
+  .consegna .requisiti li::before { content: "✓ "; color: var(--verde); font-weight: 700; }
+
+  /* SPAZIO RISPOSTA */
+  .risposta {
+    border: 1.5px solid var(--bordo);
+    border-radius: 4px;
+    min-height: 60px;
+    margin-top: 8px;
+    background: #fafbfc;
+    padding: 8px;
+  }
+
+  /* ATTENZIONE */
+  .attenzione {
+    background: #fff5f5;
+    border-left: 4px solid #e05252;
+    padding: 10px 14px;
+    border-radius: 0 4px 4px 0;
+    margin: 10px 0;
+  }
+  .attenzione p { font-size: 13px; color: #7a2020; line-height: 1.6; }
+  .attenzione strong { color: #c03030; }
+
+  /* FOOTER */
+  .footer {
+    border-top: 1.5px solid var(--bordo);
+    padding: 12px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    color: #8090a8;
+    letter-spacing: 0.5px;
+  }
+  .nome-campo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--testo);
+  }
+  .nome-campo span { border-bottom: 1.5px solid var(--bordo); width: 160px; display: inline-block; height: 18px; }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .pagina { box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+<div class="pagina">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Laboratorio di Informatica</h1>
+      <h2>NumPy e Grafici<br>di Funzioni</h2>
+    </div>
+    <div class="header-right">
+      4ª Liceo Scienze Applicate<br>
+      Python · matplotlib · numpy<br>
+      Durata: 1 ora<br>
+      Data: _______________
+    </div>
+  </div>
+
+  <div class="corpo">
+
+    <div class="obiettivi">
+      <h3>Obiettivi dell'attività</h3>
+      <ul>
+        <li>Usare np.linspace per vettori di valori</li>
+        <li>Tracciare più funzioni sullo stesso grafico</li>
+        <li>Personalizzare colori, stili e legenda</li>
+        <li>Collegare Python alle funzioni matematiche studiate</li>
+      </ul>
+    </div>
+
+    <!-- FASE 1 -->
+    <div class="fase fase-1">
+      <div class="fase-header">
+        <div class="fase-num">1</div>
+        <div class="fase-title">Copia ed esegui</div>
+        <div class="fase-tempo">⏱ 0 – 10 min</div>
+      </div>
+      <div class="fase-body">
+        <p class="istruzione">Scrivi esattamente questo codice nel tuo editor e mandalo in esecuzione. Osserva il grafico prodotto.</p>
+        <div class="codice-label">grafico_funzioni.py</div>
+        <div class="codice">
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt<br>
+<span class="kw">import</span> numpy <span class="kw">as</span> np<br>
+<br>
+plt.<span class="fn">figure</span>(<span class="st">'tre funzioni'</span>, [<span class="nm">5</span>, <span class="nm">3.5</span>])<br>
+<br>
+x = np.<span class="fn">linspace</span>(<span class="nm">0</span>, <span class="nm">5</span>, <span class="nm">30</span>)  <span class="cm"># vettore di NumPy</span><br>
+<br>
+plt.<span class="fn">plot</span>(x, x,      label=<span class="st">'lineare'</span>,   linewidth=<span class="nm">2</span>)<br>
+plt.<span class="fn">plot</span>(x, x**<span class="nm">2</span>,  label=<span class="st">'quadratica'</span>, linewidth=<span class="nm">2</span>)<br>
+plt.<span class="fn">plot</span>(x, x**<span class="nm">3</span>,  label=<span class="st">'cubica'</span>,     linewidth=<span class="nm">2</span>)<br>
+<br>
+plt.<span class="fn">title</span>(<span class="st">'Grafico di tre funzioni con NumPy'</span>)<br>
+plt.<span class="fn">legend</span>()<br>
+plt.<span class="fn">grid</span>(<span class="kw">True</span>, color=<span class="st">'grey'</span>)<br>
+plt.<span class="fn">show</span>()
+        </div>
+        <p class="istruzione" style="margin-top:10px; font-size:13px; color:#556;">💬 <em>Quanti punti stai usando per disegnare ciascuna curva? Come lo sai?</em></p>
+      </div>
+    </div>
+
+    <!-- FASE 2 -->
+    <div class="fase fase-2">
+      <div class="fase-header">
+        <div class="fase-num">2</div>
+        <div class="fase-title">Modifica e osserva</div>
+        <div class="fase-tempo">⏱ 10 – 30 min</div>
+      </div>
+      <div class="fase-body">
+        <p class="istruzione">Rispondi a ciascuna domanda <strong>dopo aver provato la modifica nel codice</strong>.</p>
+
+        <div class="domanda">
+          <div class="domanda-n">1</div>
+          <div>
+            <p>Sostituisci <span class="hint">linspace(0, 5, 30)</span> con <span class="hint">linspace(0, 5, 5)</span>, poi con <span class="hint">linspace(0, 5, 300)</span>. Descrivi cosa cambia nel grafico nei due casi.</p>
+            <div class="risposta"></div>
+          </div>
+        </div>
+
+        <div class="domanda">
+          <div class="domanda-n">2</div>
+          <div>
+            <p>Aggiungi dopo <code style="font-family:monospace;font-size:12px;background:#f0f4ff;padding:1px 5px;border-radius:3px">plt.legend()</code> queste due righe:<br>
+            <span class="hint">plt.xlabel('x')</span> &nbsp; <span class="hint">plt.ylabel('y')</span> &nbsp; &nbsp; Cosa aggiunge al grafico?</p>
+            <div class="risposta"></div>
+          </div>
+        </div>
+
+        <div class="domanda">
+          <div class="domanda-n">3</div>
+          <div>
+            <p>Come renderesti la curva cubica tratteggiata?
+            <span class="hint">linestyle='--'</span> &nbsp; Scrivi la riga modificata qui sotto.</p>
+            <div class="risposta"></div>
+          </div>
+        </div>
+
+        <div class="domanda">
+          <div class="domanda-n">4</div>
+          <div>
+            <p>Cambia il colore della curva quadratica in rosso. <em>(Cerca nella documentazione matplotlib il parametro corretto.)</em></p>
+            <div class="risposta"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FASE 3 -->
+    <div class="fase fase-3">
+      <div class="fase-header">
+        <div class="fase-num">3</div>
+        <div class="fase-title">Sfida — Nuove funzioni</div>
+        <div class="fase-tempo">⏱ 30 – 45 min</div>
+      </div>
+      <div class="fase-body">
+        <div class="sfida-box">
+          <p>Aggiungi al grafico originale le seguenti due curve:<br><br>
+          <em>a)</em> La <strong>radice quadrata</strong> di x &nbsp;→&nbsp; <span class="hint">np.sqrt(x)</span><br><br>
+          <em>b)</em> Il <strong>seno</strong> di x solo per x ∈ [0, 2π] &nbsp;→&nbsp; dovrai creare un <em>secondo vettore</em> con un intervallo diverso<br><br>
+          💬 <em>Cosa devi cambiare nel linspace per tracciare il seno solo sul suo dominio naturale?</em></p>
+        </div>
+
+        <div class="attenzione" style="margin-top:14px">
+          <p>⚠️ <strong>Caso critico:</strong> prova ad aggiungere <code style="font-size:12px;background:none;color:#c03030">np.tan(x)</code> con lo stesso vettore x. Cosa succede al grafico? Perché? <em>Discutine con il tuo compagno.</em></p>
+        </div>
+
+        <div class="risposta" style="min-height:50px; margin-top:10px"></div>
+      </div>
+    </div>
+
+    <!-- CONSEGNA LIBERA -->
+    <div class="consegna">
+      <h3>🎨 Consegna finale — Il vostro grafico (in coppia)</h3>
+      <p>Scegliete <strong>due funzioni matematiche</strong> studiate quest'anno e create un grafico che le confronti. Il risultato deve essere <em>da presentazione</em>: curate ogni dettaglio.</p>
+      <ul class="requisiti">
+        <li>Titolo descrittivo</li>
+        <li>Legenda leggibile</li>
+        <li>Assi etichettati (xlabel, ylabel)</li>
+        <li>Colori scelti con criterio</li>
+        <li>Intervallo di x coerente con il dominio</li>
+        <li>Almeno uno stile di linea diverso</li>
+      </ul>
+    </div>
+
+    <div style="margin-top: 4px;">
+      <p style="font-size:13px; color:#5a6a80; font-family:'Barlow Condensed',sans-serif; letter-spacing:0.5px; margin-bottom:6px">FUNZIONI SCELTE — spiegate brevemente la vostra scelta:</p>
+      <div class="risposta" style="min-height:70px"></div>
+    </div>
+
+  </div><!-- fine corpo -->
+
+  <div class="footer">
+    <div class="nome-campo">Nome: <span></span></div>
+    <div class="nome-campo">Cognome: <span></span></div>
+    <div>4ª LSA &nbsp;·&nbsp; Lab NumPy</div>
+  </div>
+
+</div>
+</body>
+</html>
